@@ -1,0 +1,12 @@
+# Django, DRF & batteries
+Django==4.1.3
+djangorestframework
+django-filter
+# OpenAPI 3.0 schema generation
+drf-spectacular
+
+# Postgres DB
+psycopg2
+
+# Testing
+pytest
