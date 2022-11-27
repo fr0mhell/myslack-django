@@ -24,6 +24,7 @@ class Profile(models.Model):
         related_name='profiles',
         on_delete=models.CASCADE,
     )
+    is_workspace_admin = models.BooleanField(default=False)
 
     full_name = models.CharField(max_length=255)
     display_name = models.CharField(max_length=255, blank=True)
