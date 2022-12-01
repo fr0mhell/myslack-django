@@ -10,3 +10,4 @@ psycopg2
 
 # Testing
 pytest
+factory_boy

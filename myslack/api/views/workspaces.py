@@ -8,6 +8,10 @@ class WorkspaceViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = WorkspaceSerializer
 
     # TODO: add dummy "invite with email" action, available to admin only
+    def get_queryset(self):
+        qs = super().get_queryset()
+        qs = qs.filter(profiles__user=self.request.user)
+        return qs
 
 
 class ProfileViewSet(
