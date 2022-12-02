@@ -4,6 +4,9 @@ from django.db import models
 class Reaction(models.Model):
     slug = models.SlugField(primary_key=True)
 
+    class Meta:
+        ordering = ['slug']
+
     def __str__(self):
         return self.slug
 
@@ -25,6 +28,9 @@ class ThreadReaction(models.Model):
         on_delete=models.CASCADE,
     )
 
+    class Meta:
+        ordering = ['reaction']
+
     def __str__(self):
         return f'{self.reaction} to {self.thread} by {self.profile}'
 
@@ -45,6 +51,9 @@ class CommentReaction(models.Model):
         related_name='comment_reactions',
         on_delete=models.CASCADE,
     )
+
+    class Meta:
+        ordering = ['reaction']
 
     def __str__(self):
         return f'{self.reaction} to {self.comment} by {self.profile}'

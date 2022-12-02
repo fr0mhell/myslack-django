@@ -18,6 +18,7 @@ class Channel(models.Model):
                 name='unique_channel_slug_per_workspace',
             ),
         ]
+        ordering = ['slug']
 
     def __str__(self):
         return f'Channel "{self.slug}" at '
@@ -36,6 +37,9 @@ class ChannelMembership(models.Model):
     )
     is_admin = models.BooleanField(default=False)
     is_read_only = models.BooleanField(default=False)
+
+    class Meta:
+        ordering = ['profile', 'channel']
 
     def __str__(self):
         return f'Comment {self.id} in {self.thread}'

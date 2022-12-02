@@ -11,6 +11,9 @@ class Thread(models.Model):
         on_delete=models.CASCADE,
     )
 
+    class Meta:
+        ordering = ['created_at']
+
     def __str__(self):
         return f'Thread {self.id} at {self.channel}'
 
@@ -24,6 +27,9 @@ class Comment(models.Model):
         related_name='comments',
         on_delete=models.CASCADE,
     )
+
+    class Meta:
+        ordering = ['created_at']
 
     def __str__(self):
         return f'Comment {self.id} in {self.thread}'

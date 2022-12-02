@@ -9,6 +9,9 @@ class Workspace(models.Model):
     name = models.CharField(max_length=1024)
     description = models.TextField()
 
+    class Meta:
+        ordering = ['name']
+
     def __str__(self):
         return f'Workspace "{self.name}"'
 
@@ -30,6 +33,9 @@ class Profile(models.Model):
     display_name = models.CharField(max_length=255, blank=True)
     email = models.EmailField(max_length=255, blank=True)
     phone = models.CharField(max_length=255, blank=True)
+
+    class Meta:
+        ordering = ['full_name']
 
     def __str__(self):
         return f'{self.full_name} ({self.user}) at {self.workspace}'
