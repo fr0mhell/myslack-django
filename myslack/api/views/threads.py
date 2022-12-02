@@ -1,6 +1,8 @@
 from rest_framework import viewsets
-from ..serializers.threads import ThreadSerializer, CommentSerializer
+
 from myslack import models
+
+from ..serializers.threads import CommentSerializer, ThreadSerializer
 
 
 class ThreadViewSet(viewsets.ModelViewSet):

@@ -1,9 +1,10 @@
-from django.urls import path, include
+from django.urls import include, path
 from rest_framework.routers import DefaultRouter
-from .views.workspaces import WorkspaceViewSet, ProfileViewSet
-from .views.threads import ThreadViewSet, CommentViewSet
-from .views.reactions import ReactionViewSet, CommentReactionViewSet, ThreadReactionViewSet
+
 from .views.channels import ChannelMembershipViewSet, ChannelViewSet
+from .views.reactions import CommentReactionViewSet, ReactionViewSet, ThreadReactionViewSet
+from .views.threads import CommentViewSet, ThreadViewSet
+from .views.workspaces import ProfileViewSet, WorkspaceViewSet
 
 # Create a router and register our viewsets with it.
 v1_router = DefaultRouter()

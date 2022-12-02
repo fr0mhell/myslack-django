@@ -1,6 +1,8 @@
 from rest_framework import mixins, viewsets
-from ..serializers.reactions import ReactionSerializer, CommentReactionSerializer, ThreadReactionSerializer
+
 from myslack import models
+
+from ..serializers.reactions import CommentReactionSerializer, ReactionSerializer, ThreadReactionSerializer
 
 
 class ReactionViewSet(viewsets.ReadOnlyModelViewSet):
