@@ -1,4 +1,6 @@
 from rest_framework import serializers
+from rest_framework.exceptions import ValidationError
+
 from myslack import models
 
 
@@ -23,3 +25,14 @@ class ProfileSerializer(serializers.ModelSerializer):
             'phone',
         )
 
+
+class InviteByEmailSerializer(serializers.Serializer):
+    email = serializers.EmailField(required=True)
+
+    def validate(self, attrs):
+        attrs = super().validate(attrs)
+        email = attrs.get('email')
+
+        if models.Profile.objects.filter(user__email=email, workspace_id=self.context.get('workspace_id')).exists():
+            raise ValidationError(f'Profile for email "{email}" already exists')
+        return attrs
