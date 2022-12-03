@@ -1,2 +1,5 @@
 # Dev dependencies
 -r base.in
+
+# Linters
+isort

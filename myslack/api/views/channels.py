@@ -1,6 +1,8 @@
 from rest_framework import mixins, viewsets
-from ..serializers.channels import ChannelSerializer, ChannelMembershipSerializer
+
 from myslack import models
+
+from ..serializers.channels import ChannelMembershipSerializer, ChannelSerializer
 
 
 class ChannelViewSet(viewsets.ModelViewSet):
