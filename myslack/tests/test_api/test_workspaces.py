@@ -72,3 +72,57 @@ class WorkspaceAPITestCase(APITestCase):
         self.assertEqual(error, f'Profile for email "{profile.user.email}" already exists')
 
 
+class ProfileAPITestCase(APITestCase):
+
+    @classmethod
+    def setUpTestData(cls):
+        cls.client = cls.client_class()
+        cls.workspace_1 = factories.WorkspaceFactory()
+        cls.workspace_2 = factories.WorkspaceFactory()
+        cls.profile_1 = factories.ProfileFactory(workspace=cls.workspace_1)
+        cls.admin_profile_1 = factories.ProfileFactory(workspace=cls.workspace_1, is_workspace_admin=True)
+        cls.profile_2 = factories.ProfileFactory(workspace=cls.workspace_2)
+
+    def setUp(self) -> None:
+        self.client.force_authenticate(self.profile_1.user)
+
+    def test_list_only_workspace_profiles(self):
+        response = self.client.get(path=reverse('myslack:profiles-list', args=[self.workspace_1.id]))
+        results = response.json()['results']
+        self.assertEqual(len(results), 2)
+        result_profile_ids = {res['id'] for res in results}
+        self.assertSetEqual(result_profile_ids, {self.profile_1.id, self.admin_profile_1.id})
+
+    def test_update_not_workspace_admin_forbidden(self):
+        response = self.client.put(
+            path=reverse('myslack:profiles-detail', args=[self.workspace_1.id, self.profile_1.id]),
+            data={'display_name': 'New display name'},
+        )
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+
+    def test_update_workspace_admin_allowed_to_edit_any_workspace_profile(self):
+        self.client.force_authenticate(self.admin_profile_1.user)
+
+        for profile in [self.profile_1, self.admin_profile_1]:
+            with self.subTest(profile=profile):
+                response = self.client.patch(
+                    path=reverse('myslack:profiles-detail', args=[self.workspace_1.id, profile.id]),
+                    data={'display_name': 'New display name'},
+                )
+                self.assertEqual(response.status_code, status.HTTP_200_OK)
+                profile.refresh_from_db()
+                self.assertEqual(profile.display_name, 'New display name')
+
+    def test_my_profile_get(self):
+        response = self.client.get(path=reverse('myslack:profiles-my-profile', args=[self.workspace_1.id]))
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.json()['id'], self.profile_1.id)
+
+    def test_my_profile_patch(self):
+        response = self.client.patch(
+            path=reverse('myslack:profiles-my-profile', args=[self.workspace_1.id]),
+            data={'display_name': 'New display name'},
+        )
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.profile_1.refresh_from_db()
+        self.assertEqual(response.json()['display_name'], self.profile_1.display_name)
