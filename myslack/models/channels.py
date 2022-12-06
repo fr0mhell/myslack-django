@@ -1,6 +1,12 @@
 from django.db import models
 
 
+class ChannelQuerySet(models.QuerySet):
+
+    def with_members_count(self):
+        return self.annotate(num_members=models.Count('channel_members'))
+
+
 class Channel(models.Model):
     name = models.CharField(max_length=255)
     slug = models.SlugField()
@@ -10,6 +16,8 @@ class Channel(models.Model):
         related_name='workspaces',
         on_delete=models.CASCADE,
     )
+
+    objects = ChannelQuerySet.as_manager()
 
     class Meta:
         constraints = [
@@ -22,6 +30,10 @@ class Channel(models.Model):
 
     def __str__(self):
         return f'Channel "{self.slug}" at '
+
+    @property
+    def members_count(self):
+        return self.num_members if hasattr(self, 'num_members') else self.channel_members.count()
 
 
 class ChannelMembership(models.Model):

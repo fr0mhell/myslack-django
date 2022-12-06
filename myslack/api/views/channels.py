@@ -6,8 +6,14 @@ from ..serializers.channels import ChannelMembershipSerializer, ChannelSerialize
 
 
 class ChannelViewSet(viewsets.ModelViewSet):
-    queryset = models.Channel.objects.all()
+    queryset = models.Channel.objects.all().with_members_count()
     serializer_class = ChannelSerializer
+
+    # TODO: create, update, delete - workspace admin only
+    #  join channel
+    #  add to channel
+    #  search
+    #  filter
 
 
 class ChannelMembershipViewSet(viewsets.ModelViewSet):

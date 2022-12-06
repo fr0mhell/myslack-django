@@ -11,6 +11,7 @@ class ChannelSerializer(serializers.ModelSerializer):
             'name',
             'slug',
             'description',
+            'members_count',
         )
 
 

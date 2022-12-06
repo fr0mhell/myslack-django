@@ -47,3 +47,24 @@ class ProfileFactory(factory.django.DjangoModelFactory):
     display_name = factory.Faker('name')
     email = factory.Faker('ascii_email')
     phone = factory.Faker('phone_number')
+
+
+class ChannelFactory(factory.django.DjangoModelFactory):
+    class Meta:
+        model = models.Channel
+
+    name = factory.Faker('company')
+    description = fuzzy.FuzzyText(length=1024)
+    workspace = factory.SubFactory(WorkspaceFactory)
+
+    @factory.lazy_attribute
+    def slug(self):
+        return slugify(self.name)
+
+
+class ChannelMembershipFactory(factory.django.DjangoModelFactory):
+    class Meta:
+        model = models.ChannelMembership
+
+    profile = factory.SubFactory(ProfileFactory)
+    channel = factory.SubFactory(ChannelFactory, workspace=factory.SelfAttribute('..profile.workspace'))
