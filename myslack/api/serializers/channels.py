@@ -13,14 +13,16 @@ class ChannelSerializer(serializers.ModelSerializer):
             'description',
             'members_count',
         )
+        read_only_fields = (
+            'id',
+            'slug',
+            'members_count',
+        )
 
 
 class ChannelMembershipSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.ChannelMembership
         fields = (
-            'id',
             'profile',
-            'is_admin',
-            'is_read_only',
         )

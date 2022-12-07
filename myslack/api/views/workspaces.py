@@ -10,6 +10,7 @@ from myslack import models
 
 from ..permissions import IsOwnerOrReadOnly, IsWorkspaceAdminOrReadOnly
 from ..serializers.workspaces import InviteByEmailSerializer, ProfileSerializer, WorkspaceSerializer
+from .mixins import WorkspaceRelatedMixin
 
 logger = logging.getLogger(__name__)
 
@@ -55,6 +56,7 @@ class WorkspaceViewSet(viewsets.ReadOnlyModelViewSet):
 
 
 class ProfileViewSet(
+    WorkspaceRelatedMixin,
     mixins.RetrieveModelMixin,
     mixins.UpdateModelMixin,
     mixins.ListModelMixin,
@@ -64,14 +66,6 @@ class ProfileViewSet(
     serializer_class = ProfileSerializer
     permission_classes = (IsWorkspaceAdminOrReadOnly, )
     filterset_fields = ['workspace']
-
-    @property
-    def workspace_id(self):
-        return self.kwargs.get('workspace_id')
-
-    def get_queryset(self):
-        qs = super().get_queryset()
-        return qs.filter(workspace_id=self.workspace_id)
 
     @action(
         detail=False,
