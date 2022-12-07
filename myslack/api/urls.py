@@ -1,7 +1,7 @@
 from django.urls import include, path
 from rest_framework.routers import DefaultRouter
 
-from .views.channels import ChannelMembershipViewSet, ChannelViewSet
+from .views.channels import ChannelViewSet
 from .views.reactions import CommentReactionViewSet, ReactionViewSet, ThreadReactionViewSet
 from .views.threads import CommentViewSet, ThreadViewSet
 from .views.workspaces import ProfileViewSet, WorkspaceViewSet
@@ -27,11 +27,6 @@ v1_router.register(
     r'workspaces/(?P<workspace_id>\d+)/channels/(?P<channel_id>\d+)/threads/',
     ThreadViewSet,
     basename='threads',
-)
-v1_router.register(
-    r'workspaces/(?P<workspace_id>\d+)/channels/(?P<channel_id>\d+)/channel-membership/',
-    ChannelMembershipViewSet,
-    basename='channel-membership',
 )
 # Thread-related API
 v1_router.register(
