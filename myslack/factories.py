@@ -57,10 +57,6 @@ class ChannelFactory(factory.django.DjangoModelFactory):
     description = fuzzy.FuzzyText(length=1024)
     workspace = factory.SubFactory(WorkspaceFactory)
 
-    @factory.lazy_attribute
-    def slug(self):
-        return slugify(self.name)
-
 
 class ChannelMembershipFactory(factory.django.DjangoModelFactory):
     class Meta:

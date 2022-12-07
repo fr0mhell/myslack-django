@@ -1,4 +1,5 @@
 from django.db import models
+from django.utils.text import slugify
 
 
 class ChannelQuerySet(models.QuerySet):
@@ -35,6 +36,10 @@ class Channel(models.Model):
     def members_count(self):
         return self.num_members if hasattr(self, 'num_members') else self.channel_members.count()
 
+    def save(self, *args, **kwargs):
+        self.slug = slugify(self.name)
+        super().save(*args, **kwargs)
+
 
 class ChannelMembership(models.Model):
     channel = models.ForeignKey(
@@ -54,4 +59,4 @@ class ChannelMembership(models.Model):
         ordering = ['profile', 'channel']
 
     def __str__(self):
-        return f'Comment {self.id} in {self.thread}'
+        return f'{self.profile} in {self.channel}'
