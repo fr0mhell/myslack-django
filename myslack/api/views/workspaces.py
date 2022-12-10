@@ -11,6 +11,7 @@ from myslack import models
 from ..permissions import IsOwnerOrReadOnly, IsWorkspaceAdminOrReadOnly
 from ..serializers.workspaces import InviteByEmailSerializer, ProfileSerializer, WorkspaceSerializer
 from .mixins import WorkspaceRelatedMixin
+from ..filters import ProfileFilter
 
 logger = logging.getLogger(__name__)
 
@@ -20,6 +21,7 @@ User = get_user_model()
 class WorkspaceViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = models.Workspace.objects.all()
     serializer_class = WorkspaceSerializer
+    pagination_class = None
 
     @property
     def workspace_id(self):
@@ -65,7 +67,13 @@ class ProfileViewSet(
     queryset = models.Profile.objects.all()
     serializer_class = ProfileSerializer
     permission_classes = (IsWorkspaceAdminOrReadOnly, )
-    filterset_fields = ['workspace']
+    filterset_class = ProfileFilter
+    search_fields = [
+        'full_name',
+        'display_name',
+        'email',
+        'phone',
+    ]
 
     @action(
         detail=False,

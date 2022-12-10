@@ -126,3 +126,16 @@ class ProfileAPITestCase(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.profile_1.refresh_from_db()
         self.assertEqual(response.json()['display_name'], self.profile_1.display_name)
+
+    def test_filter_by_channel(self):
+        channel = factories.ChannelFactory.create(workspace=self.workspace_1)
+
+        url = reverse('myslack:profiles-list', args=[self.workspace_1.id])
+        response = self.client.get(path=url, data={'channel': channel.id})
+        results = response.json()['results']
+        self.assertEqual(len(results), 0)
+
+        factories.ChannelMembershipFactory(channel=channel, profile=self.profile_1)
+        response = self.client.get(path=url, data={'channel': channel.id})
+        results = response.json()['results']
+        self.assertEqual(len(results), 1)

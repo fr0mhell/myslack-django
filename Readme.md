@@ -53,3 +53,4 @@ python manage.py runserver
 - [Data migrations](https://docs.djangoproject.com/en/4.1/topics/migrations/)
 - [Custom management program](https://docs.djangoproject.com/en/4.1/howto/custom-management-commands/)
 - [drf-yasg: OpenAPI Specification generator](https://drf-yasg.readthedocs.io/en/stable/)
+- [Django-filters](https://django-filter.readthedocs.io/en/stable/guide/usage.html#declaring-filters)
