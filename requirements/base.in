@@ -11,3 +11,6 @@ psycopg2
 # Testing
 pytest
 factory_boy
+
+# Swagger spec
+drf-yasg
