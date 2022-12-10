@@ -30,7 +30,7 @@ class Channel(models.Model):
         ordering = ['slug']
 
     def __str__(self):
-        return f'Channel "{self.slug}" at '
+        return f'Channel "{self.slug}" at {self.workspace}'
 
     @property
     def members_count(self):
