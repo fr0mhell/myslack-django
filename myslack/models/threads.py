@@ -7,7 +7,12 @@ class Thread(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
     channel = models.ForeignKey(
         to='Channel',
-        related_name='messages',
+        related_name='threads',
+        on_delete=models.CASCADE,
+    )
+    author = models.ForeignKey(
+        to='Profile',
+        related_name='threads',
         on_delete=models.CASCADE,
     )
 
@@ -24,6 +29,11 @@ class Comment(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
     thread = models.ForeignKey(
         to='Thread',
+        related_name='comments',
+        on_delete=models.CASCADE,
+    )
+    author = models.ForeignKey(
+        to='Profile',
         related_name='comments',
         on_delete=models.CASCADE,
     )
