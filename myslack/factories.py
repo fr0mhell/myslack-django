@@ -10,7 +10,6 @@ from faker import Faker
 from . import models
 
 fake = Faker()
-Faker.seed(0)
 User = get_user_model()
 
 

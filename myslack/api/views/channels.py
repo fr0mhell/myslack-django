@@ -13,7 +13,6 @@ class ChannelViewSet(WorkspaceRelatedMixin, viewsets.ModelViewSet):
     queryset = models.Channel.objects.all().with_members_count()
     serializer_class = ChannelSerializer
     permission_classes = (IsWorkspaceAdminOrReadOnly, )
-    filterset_fields = ['workspace']
     search_fields = ['name', 'description']
 
     @property

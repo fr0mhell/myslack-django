@@ -9,7 +9,6 @@ class ProfileFilter(django_filters.rest_framework.FilterSet):
     class Meta:
         model = models.Profile
         fields = (
-            'workspace',
             'channel',
         )
 

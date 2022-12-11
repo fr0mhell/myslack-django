@@ -9,7 +9,7 @@ from rest_framework.permissions import SAFE_METHODS
 from myslack import models
 
 from ..filters import ProfileFilter
-from ..permissions import IsOwnerOrReadOnly, IsWorkspaceAdminOrReadOnly, IsWorkspaceMember
+from ..permissions import IsOwner, IsWorkspaceAdminOrReadOnly, IsWorkspaceMember
 from ..serializers.workspaces import InviteByEmailSerializer, ProfileSerializer, SearchSerializer, WorkspaceSerializer
 from .mixins import WorkspaceRelatedMixin
 
@@ -34,7 +34,7 @@ class WorkspaceViewSet(viewsets.ReadOnlyModelViewSet):
 
     def get_serializer_context(self):
         context = super().get_serializer_context()
-        if workspace_id := self.kwargs.get('pk'):
+        if workspace_id := self.workspace_id:
             context.update({'workspace_id': workspace_id})
         return context
 
@@ -72,7 +72,7 @@ class WorkspaceViewSet(viewsets.ReadOnlyModelViewSet):
         ).values_list('channel_id', flat=True)
 
         # 2. Get search params
-        serializer = self.get_serializer_class()(data=request.data, user_channel_ids=visible_channels)
+        serializer = self.get_serializer(data=request.data, user_channel_ids=visible_channels)
         serializer.is_valid(raise_exception=True)
         search_params = serializer.data.copy()
 
@@ -140,7 +140,7 @@ class ProfileViewSet(
         methods=['get', 'patch'],
         url_path='my-profile',
         url_name='my-profile',
-        permission_classes=(IsOwnerOrReadOnly, ),
+        permission_classes=(IsOwner,),
     )
     def my_profile(self, request, *args, **kwargs):
         """Allows to retrieve or edit User's own profile.

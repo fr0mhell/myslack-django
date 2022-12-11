@@ -31,7 +31,7 @@ class Command(BaseCommand):
         # Every user has profile in at least 1 Workspace
         print('Adding Users to Workspaces...')
         for user in users:
-            random.shuffle(workspaces)
+            workspaces = random.sample(workspaces, random.randint(1, WORKSPACES))
             for workspace in workspaces:
                 factories.ProfileFactory.create(user=user, workspace=workspace)
 

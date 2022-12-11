@@ -24,10 +24,10 @@ class IsWorkspaceAdminOrReadOnly(permissions.BasePermission):
         return self.has_permission(request, view)
 
 
-class IsOwnerOrReadOnly(permissions.BasePermission):
+class IsOwner(permissions.BasePermission):
     def has_object_permission(self, request, view, obj):
         profile = get_object_or_404(Profile, user=request.user, workspace_id=view.workspace_id)
-        return obj.profile_id == profile.id or request.method in permissions.SAFE_METHODS
+        return obj.profile_id == profile.id
 
 
 class IsWorkspaceMember(permissions.BasePermission):

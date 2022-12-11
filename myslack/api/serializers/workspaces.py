@@ -23,6 +23,10 @@ class ProfileSerializer(serializers.ModelSerializer):
             'display_name',
             'email',
             'phone',
+            'workspace',
+        )
+        read_only_fields = (
+            'workspace',
         )
 
 

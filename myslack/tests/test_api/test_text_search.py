@@ -26,7 +26,7 @@ class SearchAPITestCase(APITestCase):
         cls.comment_2 = factories.CommentFactory(thread=cls.thread_1, text='heLlo')
 
         cls.thread_2 = factories.ThreadFactory(channel=cls.channel_1, text='Goodbye')
-        cls.comment_3 = factories.CommentFactory(author=cls.profile, thread=cls.thread_2, text='bye')
+        cls.comment_3 = factories.CommentFactory(author=cls.profile, thread=cls.thread_2, text='Bye')
         cls.comment_4 = factories.CommentFactory(thread=cls.thread_2, text='thanks')
 
         cls.channel_2 = factories.ChannelFactory(workspace=cls.workspace)
@@ -42,6 +42,12 @@ class SearchAPITestCase(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         results = response.json()
         self.assertEqual(len(results), 3)
+
+        factories.ChannelMembershipFactory(profile=self.profile, channel=self.channel_2)
+        response = self.client.post(path=self.url, data={'search_string': 'bye'})
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        results = response.json()
+        self.assertEqual(len(results), 4)
 
     def test_search_by_text_and_author(self):
         response = self.client.post(path=self.url, data={'search_string': 'llo', 'author': self.profile.id})
