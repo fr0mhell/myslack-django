@@ -28,7 +28,7 @@ class WorkspaceAPITestCase(APITestCase):
         """Check Workspaces LIST API returns only Workspaces where a User has Profile."""
         response = self.client.get(reverse('myslack:workspaces-list'))
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(len(response.data['results']), 2)
+        self.assertEqual(len(response.data), 2)
 
     def test_detail_workspace_wo_profile_not_found(self):
         """Check API responds with 404 when trying to get Workspace where a User does not have profile."""
