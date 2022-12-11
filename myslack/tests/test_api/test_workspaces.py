@@ -28,7 +28,7 @@ class WorkspaceAPITestCase(APITestCase):
         """Check Workspaces LIST API returns only Workspaces where a User has Profile."""
         response = self.client.get(reverse('myslack:workspaces-list'))
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(len(response.data['results']), 2)
+        self.assertEqual(len(response.data), 2)
 
     def test_detail_workspace_wo_profile_not_found(self):
         """Check API responds with 404 when trying to get Workspace where a User does not have profile."""
@@ -126,3 +126,16 @@ class ProfileAPITestCase(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.profile_1.refresh_from_db()
         self.assertEqual(response.json()['display_name'], self.profile_1.display_name)
+
+    def test_filter_by_channel(self):
+        channel = factories.ChannelFactory.create(workspace=self.workspace_1)
+
+        url = reverse('myslack:profiles-list', args=[self.workspace_1.id])
+        response = self.client.get(path=url, data={'channel': channel.id})
+        results = response.json()['results']
+        self.assertEqual(len(results), 0)
+
+        factories.ChannelMembershipFactory(channel=channel, profile=self.profile_1)
+        response = self.client.get(path=url, data={'channel': channel.id})
+        results = response.json()['results']
+        self.assertEqual(len(results), 1)
